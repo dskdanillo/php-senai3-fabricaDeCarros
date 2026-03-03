@@ -1,5 +1,5 @@
 <?php
-// Representa UM carro
+
 class Carro {
 
     private string $modelo;
