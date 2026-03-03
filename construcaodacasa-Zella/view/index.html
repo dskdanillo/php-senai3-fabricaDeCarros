@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu da Casa</title>
+    <link rel="stylesheet" type="text/css" href="../view/css/style.css">
+    <script src="../view/js/validacoes.js"></script>
+    
+</head>
+<body>
+    <div class="menu-container">
+        <img src="img/iconCasa.png" alt="icone de casa" height="60px" width="60px">
+        <h1>Gerenciamento da Casa</h1>
+        <p>Escolha uma ação:</p>
+
+        <form id="menuForm" action="../controller/processa.php" method="POST">
+            <button type="submit" name="acao" value="construir">Construir Casa</button>
+            <button type="submit" name="acao" value="movimentar">Movimentar Portas e Janelas</button>
+            <button type="submit" name="acao" value="ver_info">Ver Informações da Casa</button>
+        </form>
+        <p class="descricao">*Este projeto foi feito com o paradigma de programação orientada a objetos(POO).</p>
+    </div>
+</body>
+</html>

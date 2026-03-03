@@ -1,0 +1,18 @@
+FabricaDeCarros/
+│
+├── controller/
+│   └── processa.php
+│
+├── model/
+│   ├── Carro.php
+│   └── Fabrica.php
+│
+├── view/
+│   ├── index.html
+│   ├── css/
+│   │   └── estilo.css
+│   └── js/
+│       └── validacao.js
+│
+└── img/
+    └── carro-bg.png
