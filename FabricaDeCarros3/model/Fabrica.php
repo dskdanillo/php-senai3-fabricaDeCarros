@@ -18,8 +18,7 @@ require_once 'Carro.php';
                     $this->carros[] = $carro;
                 }
             }
-
-            // VENDER (remove carro)
+//--------------------------------------------------------------------VENDER (remove carro)
             public function venderCarro($modelo,$cor){
 
                 foreach($this->carros as $i=>$carro){
@@ -40,7 +39,7 @@ require_once 'Carro.php';
             return $this->carros;
         }
 
-        // LISTAR
+//---------------------------------------------------------------------LISTAR
         public function listarCarros(){
 
             if(empty($this->carros))

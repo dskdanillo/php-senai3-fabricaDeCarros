@@ -1,11 +1,7 @@
 <?php
-session_start();
+$pdo = new PDO("mysql:host=localhost;dbname=fabrica", "root", "");
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-require_once '../model/Fabrica.php';
-
-$fabrica = isset($_SESSION['fabrica'])
- ? unserialize($_SESSION['fabrica'])
- : new Fabrica();
 
 $acao = $_POST['acao'] ?? '';
 
@@ -48,22 +44,25 @@ break;
 
 case 'salvar':
 
-$qtd=$_POST['qtd'];
-$dados=[];
+    case 'salvar':
 
-for($i=0;$i<$qtd;$i++){
-$dados[]=[
-'modelo'=>$_POST["modelo_$i"],
-'cor'=>$_POST["cor_$i"]
-];
-}
-
-$fabrica->fabricarCarro($dados);
-$_SESSION['fabrica']=serialize($fabrica);
-
-echo "<div class='box'><h2>Carros fabricados!</h2>
-<a href='../view/index.html'>Menu</a></div>";
-break;
+        require_once '../conexao.php';
+        
+        $qtd = $_POST['qtd'];
+        
+        for($i=0;$i<$qtd;$i++){
+            $modelo = $_POST["modelo_$i"];
+            $cor = $_POST["cor_$i"];
+        
+            $sql = "INSERT INTO carros (modelo, cor) VALUES (?, ?)";//INSERT introduz os valores no banco 
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$modelo, $cor]);
+        }
+        
+        echo "<div class='box'>Carros salvos no banco!</div>";
+        echo "<br><a href='../view/index.html'><button>Voltar para tela inicial</button></a>";
+    
+        break;
 
 case 'vender':
 
@@ -80,26 +79,50 @@ break;
 
 case 'remover':
 
-if($fabrica->venderCarro($_POST['modelo'],$_POST['cor']))
-echo "<div class='box'>Carro vendido!</div>";
-else
-echo "<div class='box'>Carro não encontrado!</div>";
+    require_once '../conexao.php';// Puxa a conexao com o banco
+    
+    $modelo = $_POST['modelo'];
+    $cor = $_POST['cor'];
+    
+    $sql = "DELETE FROM carros WHERE modelo = ? AND cor = ?";// DELETE FRON  comando que remove o dado do banco
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$modelo, $cor]);
+    
+    if($stmt->rowCount() > 0){
+        echo "<div class='box'>Carro vendido!</div>";
+    } else {
+        echo "<div class='box'>Carro não encontrado!</div>";
+    }
+    
+    echo "<a href='../view/index.html'>Menu</a>";
+    break;
 
-$_SESSION['fabrica']=serialize($fabrica);
+    case 'ver':
 
-echo "<a href='../view/index.html'>Menu</a>";
-break;
+        require_once '../conexao.php';
+        
+        $sql = "SELECT * FROM carros";
+        $stmt = $pdo->query($sql);
+        
+        echo "<div class='box'>";
+        echo "<h2>Lista de Carros</h2>";
+        
+        foreach($stmt as $row){
+            echo "ID: {$row['id']} - Modelo: {$row['modelo']} - Cor: {$row['cor']}<br>";
+        }
+        
+        echo "<br><a href='../view/index.html'>Menu</a></div>";
+        break;
 
-case 'ver':
 
-echo "<div class='box'>";
-echo $fabrica->listarCarros();
-echo "<br><a href='../view/index.html'>Menu</a></div>";
-break;
 
-case 'limpar':
-session_destroy();
-echo "<div class='box'>Sessão finalizada</div>";
-break;
+        case 'limpar':
+
+            require_once '../conexao.php';
+            
+            $pdo->exec("DELETE FROM carros");
+            
+            echo "<div class='box'>Banco limpo!</div>";
+            break;
 }
 ?>
