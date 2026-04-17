@@ -44,8 +44,6 @@ break;
 
 case 'salvar':
 
-    case 'salvar':
-
         require_once '../conexao.php';
         
         $qtd = $_POST['qtd'];
@@ -66,8 +64,19 @@ case 'salvar':
 
 case 'vender':
 
-echo '
-<div class="box">
+    require_once '../conexao.php';
+        
+    $sql = "SELECT * FROM carros";
+    $stmt = $pdo->query($sql);
+    
+    echo "<div class='box'>";
+    echo "<h2>Lista de Carros</h2>";
+    
+    foreach($stmt as $row){
+        echo "ID: {$row['id']} - Modelo: {$row['modelo']} - Cor: {$row['cor']}<br>";
+    }
+    echo '
+
 <form method="POST">
 <input type="hidden" name="acao" value="remover">
 Modelo:<input name="modelo" class="modelo" required>
@@ -94,7 +103,7 @@ case 'remover':
         echo "<div class='box'>Carro não encontrado!</div>";
     }
     
-    echo "<a href='../view/index.html'>Menu</a>";
+    echo "<br><a href='../view/index.html'><button>Voltar para tela inicial</button></a>";
     break;
 
     case 'ver':
@@ -111,7 +120,7 @@ case 'remover':
             echo "ID: {$row['id']} - Modelo: {$row['modelo']} - Cor: {$row['cor']}<br>";
         }
         
-        echo "<br><a href='../view/index.html'>Menu</a></div>";
+        echo "<br><a href='../view/index.html'><button>Voltar para tela inicial</button></a>";
         break;
 
 
@@ -123,6 +132,7 @@ case 'remover':
             $pdo->exec("DELETE FROM carros");
             
             echo "<div class='box'>Banco limpo!</div>";
+            echo "<br><a href='../view/index.html'><button>Voltar para tela inicial</button></a>";
             break;
 }
 ?>
